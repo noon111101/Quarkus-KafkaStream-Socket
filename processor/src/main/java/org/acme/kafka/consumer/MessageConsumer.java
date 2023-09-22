@@ -1,4 +1,4 @@
-package org.acme.kafka.processor;
+package org.acme.kafka.consumer;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -18,7 +18,7 @@ public class MessageConsumer {
     @Inject
     ChatSocket chatSocket;
 
-    @Incoming("requests")
+    @Incoming("request")
     public void process(Message message) throws InterruptedException {
         System.out.println("TRACE_1 " + message);
         chatSocket.broadcast(">> " + message.getUsername() + ": " + message.message);
