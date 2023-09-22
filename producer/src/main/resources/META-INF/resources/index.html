@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng nhập và Đăng ký</title>
+</head>
+
+<body>
+<h1>Đăng nhập</h1>
+<form id="loginForm">
+    <label for="loginUsername">Tên đăng nhập:</label>
+    <input type="text" id="loginUsername" name="loginUsername" required>
+    <br>
+    <label for="loginPassword">Mật khẩu:</label>
+    <input type="password" id="loginPassword" name="loginPassword" required>
+    <br>
+    <button type="button" onclick="login()">Đăng nhập</button>
+</form>
+
+<h1>Đăng ký</h1>
+<form id="registerForm">
+    <label for="registerUsername">Tên đăng nhập:</label>
+    <input type="text" id="registerUsername" name="registerUsername" required>
+    <br>
+    <label for="registerPassword">Mật khẩu:</label>
+    <input type="password" id="registerPassword" name="registerPassword" required>
+    <br>
+    <label for="registerPassword">Email:</label>
+    <input type="password" id="registerEmail" name="registerEmail" required>
+    <br>
+    <button type="button" onclick="register()">Đăng ký</button>
+</form>
+
+<div id="message"></div>
+
+<script>
+    function login() {
+        var loginUsername = document.getElementById("loginUsername").value;
+        var loginPassword = document.getElementById("loginPassword").value;
+
+        // Tạo yêu cầu POST đến API đăng nhập
+        var loginRequest = {
+            username: loginUsername,
+            password: loginPassword
+        };
+
+        fetch('/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(loginRequest)
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    return response.text()
+                } else {
+                    throw new Error('Đăng nhập không thành công');
+                }
+            })
+            .then(data =>{
+                var token = data;
+                if (token) {
+                    getUser(token);
+                    window.location.href = '/chat.html';
+
+                } else {
+                    throw new Error('Không có mã token trong phản hồi');
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi đăng nhập: ' + error.message);
+            });
+    }
+    function getUser(token) {
+        // Tạo yêu cầu GET đến API `/hello/me` và gắn mã token vào tiêu đề Authorization
+        fetch('/hello/me', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    throw new Error('Yêu cầu thất bại');
+                }
+            })
+            .then(data => {
+                localStorage.setItem('username', data.username);
+            })
+            .catch(error => {
+                console.error('Lỗi yêu cầu: ' + error.message);
+            });
+
+    }
+
+
+    function register() {
+        var registerUsername = document.getElementById("registerUsername").value;
+        var registerPassword = document.getElementById("registerPassword").value;
+        var registerEmail = document.getElementById("registerEmail").value;
+
+        // Tạo yêu cầu POST đến API đăng ký
+        var registerRequest = {
+            username: registerUsername,
+            password: registerPassword,
+            email : registerEmail
+        };
+
+        fetch('/users/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(registerRequest)
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    throw new Error('Đăng ký không thành công');
+                }
+            })
+            .then(data => {
+                // Xử lý kết quả đăng ký (nếu cần)
+                console.log('Đăng ký thành công');
+            })
+            .catch(error => {
+                console.error('Lỗi đăng ký: ' + error.message);
+            });
+    }
+</script>
+</body>
+
+</html>
