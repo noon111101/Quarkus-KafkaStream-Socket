@@ -1,0 +1,30 @@
+/* Thiết lập các kiểu CSS cho phiếu bán hàng */
+.order {
+    border: 2px solid #333;
+    padding: 10px;
+    margin: 10px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.order h2 {
+    font-size: 18px;
+    margin-top: 0;
+}
+
+.order p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+/* Cuộn cho vùng chat */
+#chat {
+    height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+

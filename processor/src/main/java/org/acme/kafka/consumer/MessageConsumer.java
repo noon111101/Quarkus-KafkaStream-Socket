@@ -21,6 +21,6 @@ public class MessageConsumer {
     @Incoming("request")
     public void process(Message message) throws InterruptedException {
         System.out.println("TRACE_1 " + message);
-        chatSocket.broadcast(">> " + message.getUsername() + ": " + message.message);
+        chatSocket.broadcast(">> " + message.getUsername() + ": " + message.getMessage() + "\n");
     }
 }

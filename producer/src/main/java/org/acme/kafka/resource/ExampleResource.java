@@ -11,7 +11,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.SecurityContext;
-import org.acme.kafka.User;
+import org.acme.kafka.entity.User;
 import org.acme.kafka.security.Roles;
 
 @Path("/hello")

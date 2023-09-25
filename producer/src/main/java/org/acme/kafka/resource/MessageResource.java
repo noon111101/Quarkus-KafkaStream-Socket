@@ -1,7 +1,8 @@
-package org.acme.kafka.producer;
+package org.acme.kafka.resource;
 
 import java.util.UUID;
 
+import io.smallrye.reactive.messaging.kafka.Record;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -18,7 +19,7 @@ import io.smallrye.mutiny.Multi;
 public class MessageResource {
 
     @Channel("send-request")
-    Emitter<Message> quoteRequestEmitter;
+    Emitter<Record<String, String>> messageEmitter;
 
     /**
      * Endpoint to generate a new quote request id and send it to "quote-requests" Kafka topic using the emitter.
@@ -27,7 +28,7 @@ public class MessageResource {
     @Path("/request")
     @Produces(MediaType.APPLICATION_JSON)
     public Message createRequest(Message message) {
-        quoteRequestEmitter.send(message);
+        messageEmitter.send(Record.of(message.getUsername(), message.message));
         return message;
     }
 

@@ -90,6 +90,7 @@
             })
             .then(data => {
                 localStorage.setItem('username', data.username);
+                localStorage.setItem('userId', data.id);
             })
             .catch(error => {
                 console.error('Lỗi yêu cầu: ' + error.message);

@@ -44,7 +44,8 @@ public class ChatSocket {
         }
     }
 
-    public void broadcast(String message) {
+    
+    public void broadcast(String message ) {
         sessions.values().forEach(s -> {
             s.getAsyncRemote().sendObject(message, result -> {
                 if (result.getException() != null) {
@@ -53,5 +54,6 @@ public class ChatSocket {
             });
         });
     }
+
 
 }

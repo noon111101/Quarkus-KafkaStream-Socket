@@ -6,7 +6,7 @@
     <title>Quarkus Chat!</title>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly-additions.min.css">
-
+    <link rel="stylesheet" type="text/css" href="style.css">
     <style>
         #chat {
             resize: none;
@@ -34,12 +34,59 @@
         <br/>
     </div>
     <div class="row">
-        <textarea class="col-md-8" id="chat"></textarea>
+        <div class="col-md-8" id="chat"></div>
     </div>
     <div class="row">
         <input class="col-md-6" id="msg" type="text" placeholder="enter your message">
         <button class="col-md-1 btn btn-primary" id="send" type="button" disabled>send</button>
     </div>
+    <h2>Đơn hàng cần bán</h2>
+    <form id="orderForm">
+        <!-- Trường price -->
+        <div class="form-group">
+            <label for="price">Giá:</label>
+            <input type="number" class="form-control" id="price" name="price" step="0.01">
+        </div>
+
+        <!-- Trường name -->
+        <div class="form-group">
+            <label for="nameOrder">Tên sản phẩm:</label>
+            <input type="text" class="form-control" id="nameOrder" name="name">
+        </div>
+
+        <!-- Trường số lượng -->
+        <div class="form-group">
+            <label for="quantity">Số lượng:</label>
+            <input type="number" class="form-control" id="quantity" name="quantity">
+        </div>
+
+        <!-- Nút Submit -->
+        <button type="button" onclick="order(1)" class="btn btn-primary">Đặt bán</button>
+    </form>
+    <br/>
+    <h2>Đơn hàng cần mua</h2>
+    <form id="buyForm">
+        <!-- Trường price -->
+        <div class="form-group">
+            <label for="priceBuy">Giá:</label>
+            <input type="number" class="form-control" id="priceBuy" name="price" step="0.01">
+        </div>
+
+        <!-- Trường name -->
+        <div class="form-group">
+            <label for="nameBuy">Tên sản phẩm:</label>
+            <input type="text" class="form-control" id="nameBuy" name="name">
+        </div>
+
+        <!-- Trường số lượng -->
+        <div class="form-group">
+            <label for="quantityBuy">Số lượng:</label>
+            <input type="number" class="form-control" id="quantityBuy" name="quantity">
+        </div>
+
+        <!-- Nút Submit -->
+        <button type="button" onclick="order(2)" class="btn btn-primary">Đặt hàng</button>
+    </form>
 
 </div>
 
@@ -49,7 +96,7 @@
 
 <script type="text/javascript">
     var username = localStorage.getItem('username');
-
+    var userId = localStorage.getItem('userId');
     var connected = false;
     var socket;
 
@@ -91,13 +138,47 @@
                 $("#name").attr("disabled", true);
                 $("#msg").focus();
             };
-            socket.onmessage =function(m) {
-                console.log("Got message: " + m.data);
-                $("#chat").append(m.data + "\n");
-                scrollToBottom();
+            socket.onmessage =function(m ) {
+                if(!m.data.includes("{")){
+                    console.log("Got message: " + m.data);
+                    $("#chat").append(m.data + "<br>");
+                    scrollToBottom();
+                }
+                else {
+                    var colonIndex = m.data.indexOf(':');
+                    if (colonIndex !== -1)
+                        var jsonPart = m.data.substr(colonIndex + 1).trim();
+                    var data = JSON.parse(jsonPart);
+                    console.log(data)
+                    var name = data.name;
+                    var price = data.price;
+                    var status = data.status;
+                    var quantity = data.quantity;
+                    var type = data.type;
+                    // Sử dụng jQuery để chọn phần tử "chat"
+
+                    // Tạo một phần tử div mới để hiển thị thông tin phiếu bán hàng
+                    var $orderDiv = $("<div>").addClass("order");
+
+                    // Thêm thông tin vào div phiếu bán hàng
+                    $orderDiv.html(`
+                        <h2>Phiếu ${type} </h2>
+                        <p><strong>Tên hàng:</strong> ${name}</p>
+                        <p><strong>Giá:</strong> ${price}</p>
+                        <p><strong>Trạng thái:</strong> ${status}</p>
+                        <p><strong>Số lượng:</strong> ${quantity}</p>
+                    `);
+
+                    // Thêm div phiếu bán hàng vào vùng hiển thị chat
+                    $("#chat").append($orderDiv);
+                    scrollToBottom();
+
+                }
             };
         }
     };
+
+
     var sendMessage = function() {
         if (connected) {
             var value = $("#msg").val();
@@ -131,6 +212,62 @@
                 });
         }
     };
+    function order(type) {
+        if(type === 1) {
+            var orderName = document.getElementById("nameOrder").value;
+            var price = document.getElementById("price").value;
+            var quantity = document.getElementById("quantity").value;
+            var orderRequest = {
+                price: price,
+                name: orderName,
+                userId:userId,
+                status:"OPEN",
+                quantity:quantity,
+                type:"SELL"
+            };
+        }
+        else {
+            var orderName = document.getElementById("nameBuy").value;
+            var price = document.getElementById("priceBuy").value;
+            var quantity = document.getElementById("quantityBuy").value;
+            var orderRequest = {
+                price: price,
+                name: orderName,
+                userId:userId,
+                status:"OPEN",
+                quantity:quantity,
+                type:"BUY"
+            };
+        }
+
+        // Tạo yêu cầu POST đến API đăng nhập
+
+
+        fetch('/order/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(orderRequest)
+        }).then(response => {
+            if (response.status === 200) {
+                $("#nameOrder").val(""); // Xóa nội dung tin nhắn sau khi gửi
+                $("#price").val("");
+                $("#quantity").val("");
+                return response.json();
+            } else {
+                throw new Error('Yêu cầu thất bại');
+            }
+        })
+            .then(data => {
+                    if (connected) {
+                        console.log(data);
+                        socket.send(JSON.stringify(data));
+                    }
+            })            .catch(error => {
+                console.error('Lỗi đăng nhập: ' + error.message);
+            });
+    }
 
 
     var scrollToBottom = function () {

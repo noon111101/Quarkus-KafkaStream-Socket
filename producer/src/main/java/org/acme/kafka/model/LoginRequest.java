@@ -1,4 +1,4 @@
-package org.acme.kafka;
+package org.acme.kafka.model;
 
 import lombok.Data;
 
