@@ -1,10 +1,7 @@
 package org.acme.kafka.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import io.quarkus.runtime.annotations.IgnoreProperty;
 import jakarta.json.bind.annotation.JsonbTransient;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 

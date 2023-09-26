@@ -10,6 +10,7 @@ import org.acme.kafka.entity.User;
 import org.acme.kafka.service.UserService;
 import org.jboss.logging.Logger;
 
+
 @ApplicationScoped
 public class AppLifecycleBean {
 
@@ -17,6 +18,7 @@ public class AppLifecycleBean {
 
     @Inject
     UserService userService;
+
     void onStart(@Observes StartupEvent ev) {
         LOGGER.info("The application is starting...");
         LOGGER.info("Stating create user");

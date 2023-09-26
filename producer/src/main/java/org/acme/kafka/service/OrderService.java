@@ -9,15 +9,13 @@ import org.acme.kafka.entity.User;
 import org.acme.kafka.model.OrderRequest;
 import org.acme.kafka.repository.OrderRepository;
 import org.acme.kafka.repository.UserRepository;
-import org.modelmapper.ModelMapper;
 
 @ApplicationScoped
 
 public class OrderService {
     @Inject
     OrderRepository orderRepository;
-    @Inject
-    ModelMapper modelMapper;
+
     @Inject
     UserRepository userRepository;
     @Transactional
