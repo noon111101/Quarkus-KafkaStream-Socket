@@ -2,12 +2,12 @@ package org.acme.kafka.entity;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.json.bind.annotation.JsonbTransient;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 public class Order extends PanacheEntity {
-    public double price;
+    public float price;
 
     public String name;
 
@@ -15,6 +15,9 @@ public class Order extends PanacheEntity {
 
     public String type;
     public OrderStatus status;
+
+    @ManyToOne
+    public Product product;
 
     @JsonbTransient
     @ManyToOne

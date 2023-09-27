@@ -16,8 +16,9 @@ public class MessageConsumer {
     @Inject
     ChatSocket chatSocket;
 
-    @Incoming("result")
+    @Incoming("request")
     public void process(Record<String, String> kafkaMessage){
+        System.out.println("Trace : MessageConsumer.process() : kafkaMessage = " + kafkaMessage.value());
         String key = kafkaMessage.key();
         String value = kafkaMessage.value();
         chatSocket.broadcast(">> " + key + ": " + value + "\n");

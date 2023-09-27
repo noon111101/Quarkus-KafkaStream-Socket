@@ -8,6 +8,7 @@ import org.acme.kafka.entity.OrderStatus;
 import org.acme.kafka.entity.User;
 import org.acme.kafka.model.OrderRequest;
 import org.acme.kafka.repository.OrderRepository;
+import org.acme.kafka.repository.ProductRepository;
 import org.acme.kafka.repository.UserRepository;
 
 @ApplicationScoped
@@ -17,12 +18,14 @@ public class OrderService {
     OrderRepository orderRepository;
 
     @Inject
+    ProductRepository productRepository;
+    @Inject
     UserRepository userRepository;
     @Transactional
     public Order createOrder (OrderRequest orderRequest){
         Order order = new Order();
         order.price = orderRequest.price;
-        order.name = orderRequest.name;
+        order.product = productRepository.findById(orderRequest.productId);
         order.quantity = orderRequest.quantity;
         order.status = orderRequest.status;
         order.type = orderRequest.type;
@@ -36,60 +39,64 @@ public class OrderService {
         if(order.type.equals("SELL")) {
             Order buyOrder = orderRepository.findBuyOrder(order.name, order.price);
             if (buyOrder != null) {
+               User buyUser = buyOrder.user;
+               User sellUser = order.user;
                 if (buyOrder.quantity == order.quantity) {
                     order.status = OrderStatus.CLOSED;
                     buyOrder.status = OrderStatus.CLOSED;
-                    User user = buyOrder.user;
-                    buyOrder.user = order.user;
-                    order.user = user;
-                    orderRepository.persist(order);
-                    orderRepository.persist(buyOrder);
+                    buyOrder.user = sellUser;
+                    order.user = buyUser;
+                    buyUser.balance = buyUser.balance - buyOrder.price * buyOrder.quantity;
+                    sellUser.balance = sellUser.balance + buyOrder.price * buyOrder.quantity;
+
                 } else if (buyOrder.quantity > order.quantity) {
                     order.status = OrderStatus.CLOSED;
                     buyOrder.quantity = buyOrder.quantity - order.quantity;
-                    orderRepository.persist(order);
-                    orderRepository.persist(buyOrder);
-
+                    buyUser.balance = buyUser.balance - order.price * order.quantity;
+                    sellUser.balance = sellUser.balance + order.price * order.quantity;
+                    order.user = buyUser;
                 } else if (buyOrder.quantity < order.quantity) {
                     buyOrder.status = OrderStatus.CLOSED;
                     order.quantity = order.quantity - buyOrder.quantity;
-                    User user = buyOrder.user;
-                    buyOrder.user = order.user;
-                    order.user = user;
-                    orderRepository.persist(order);
-                    orderRepository.persist(buyOrder);
+                    buyUser.balance = buyUser.balance - buyOrder.price * buyOrder.quantity;
+                    sellUser.balance = sellUser.balance + buyOrder.price * buyOrder.quantity;
                 }
+                userRepository.persist(buyUser);
+                userRepository.persist(sellUser);
+                orderRepository.persist(order);
+                orderRepository.persist(buyOrder);
             }
         }
         else if(order.type.equals("BUY")){
             Order sellOrder = orderRepository.findSellOrder(order.name,order.price);
             if(sellOrder != null){
+                User buyUser = order.user;
+                User sellUser = sellOrder.user;
                 if(sellOrder.quantity == order.quantity){
                     order.status = OrderStatus.CLOSED;
                     sellOrder.status = OrderStatus.CLOSED;
-                    User user = sellOrder.user;
-                    sellOrder.user = order.user;
-                    order.user = user;
-                    orderRepository.persist(order);
-                    orderRepository.persist(sellOrder);
+                    sellOrder.user = buyUser;
+                    order.user = sellUser;
+                    buyUser.balance = buyUser.balance - sellOrder.price * sellOrder.quantity;
+                    sellUser.balance = sellUser.balance + sellOrder.price * sellOrder.quantity;
+
                 }else if(sellOrder.quantity > order.quantity){
                     order.status = OrderStatus.CLOSED;
                     sellOrder.quantity = sellOrder.quantity - order.quantity;
-                    User user = sellOrder.user;
-                    sellOrder.user = order.user;
-                    order.user = user;
-                    orderRepository.persist(order);
-                    orderRepository.persist(sellOrder);
+                    buyUser.balance = buyUser.balance - order.price * order.quantity;
+                    sellUser.balance = sellUser.balance + order.price * order.quantity;
+                    order.user = sellUser;
                 }else if(sellOrder.quantity < order.quantity){
                     sellOrder.status = OrderStatus.CLOSED;
                     order.quantity = order.quantity - sellOrder.quantity;
-                    User user = sellOrder.user;
-                    sellOrder.user = order.user;
-                    order.user = user;
-                    orderRepository.persist(order);
-                    orderRepository.persist(sellOrder);
+                    buyUser.balance = buyUser.balance - sellOrder.price * sellOrder.quantity;
+                    sellUser.balance = sellUser.balance + sellOrder.price * sellOrder.quantity;
+                    sellOrder.user = buyUser;
                 }
-
+                userRepository.persist(buyUser);
+                userRepository.persist(sellUser);
+                orderRepository.persist(order);
+                orderRepository.persist(sellOrder);
             }
         }
     }

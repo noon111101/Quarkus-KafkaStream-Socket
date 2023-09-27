@@ -4,16 +4,18 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import lombok.Data;
 
 import java.util.List;
 
-
+@Data
 @Entity
 public class User extends PanacheEntity {
     public String username;
     public String email;
     public String password;
 
+    public float balance;
     @JsonbTransient
     @OneToMany(mappedBy = "user")
     public List<Order> orders;

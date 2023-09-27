@@ -3,9 +3,9 @@ package org.acme.kafka.model;
 import org.acme.kafka.entity.OrderStatus;
 
 public class OrderRequest {
-    public double price;
+    public float price;
 
-    public String name;
+    public Long productId;
 
     public int quantity;
 
