@@ -38,26 +38,25 @@ public class AppLifecycleBean {
         User user2 = userService.register(new User("khanh", "khanh@gmail.com", "khanh"));
         user2.setBalance(2000000);
         userRepository.persist(user2);
-        productService.createProduct(new Product("AAPL", "Apple Inc.", 127.35, 214.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("MSFT", "Microsoft Corporation", 214.25, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("AMZN", "Amazon.com, Inc.", 3116.42, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("GOOG", "Alphabet Inc.", 1734.16, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("FB", "Facebook, Inc.", 276.4, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("TSLA", "Tesla, Inc.", 880.8, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("NVDA", "NVIDIA Corporation", 532.0, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("PYPL", "PayPal Holdings, Inc.", 234.0, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("ADBE", "Adobe Inc.", 485.0, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("NFLX", "Netflix, Inc.", 556.0, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("CMCSA", "Comcast Corporation", 52.0, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("INTC", "Intel Corporation", 57.0, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("CSCO", "Cisco Systems, Inc.", 45.0, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("PEP", "PepsiCo, Inc.", 144.0, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("AVGO", "Broadcom Inc.", 470.0, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("TXN", "Texas Instruments Incorporated", 169.0, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("QCOM", "QUALCOMM Incorporated", 150.0, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("TMUS", "T-Mobile US, Inc.", 131.0, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("CHTR", "Charter Communications, Inc.", 640.0, 162.2, 40.3, "Financial Services"));
-        productService.createProduct(new Product("SBUX", "Starbucks Corporation", 105.0, 162.2, 40.3, "Financial Services"));
+        productService.createProduct(new Product("AAPL", "Apple Inc.", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
+        productService.createProduct(new Product("MSFT", "Microsoft Corporation", 214.25, 162.2, 40.3, 5.6, "Financial Services"));
+        productService.createProduct(new Product("GOOG", "Alphabet Inc.", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
+        productService.createProduct(new Product("AMZN", "Amazon.com, Inc.", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
+        productService.createProduct(new Product("FB", "Facebook, Inc.", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
+        productService.createProduct(new Product("TSLA", "Tesla, Inc.", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
+        productService.createProduct(new Product("NVDA", "NVIDIA Corporation", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
+        productService.createProduct(new Product("PYPL", "PayPal Holdings, Inc.", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
+        productService.createProduct(new Product("INTC", "Intel Corporation", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
+        productService.createProduct(new Product("CMCSA", "Comcast Corporation", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
+        productService.createProduct(new Product("NFLX", "Netflix, Inc.", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
+        productService.createProduct(new Product("ADBE", "Adobe Inc.", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
+        productService.createProduct(new Product("CSCO", "Cisco Systems, Inc.", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
+        productService.createProduct(new Product("PEP", "PepsiCo, Inc.", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
+        productService.createProduct(new Product("AVGO", "Broadcom Inc.", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
+        productService.createProduct(new Product("TXN", "Texas Instruments Incorporated", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
+        productService.createProduct(new Product("QCOM", "QUALCOMM Incorporated", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
+        productService.createProduct(new Product("TMUS", "T-Mobile US, Inc.", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
+        productService.createProduct(new Product("CHTR", "Charter Communications, Inc.", 127.35, 214.2, 40.3, -2.5, "Financial Services"));
     }
 
     void onStop(@Observes ShutdownEvent ev) {

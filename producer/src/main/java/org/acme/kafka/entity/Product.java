@@ -17,19 +17,20 @@ public class Product extends PanacheEntity {
     public String companyName; // Tên công ty phát hành cổ phiếu
     public double currentPrice; // Giá hiện tại của cổ phiếu
     public double marketCap; // Vốn hóa thị trường của công ty
-    public double peRatio;
-
-    public String economic; //nghành kinh tế
+    public double peRatio; // Tỷ lệ P/E (Price/Earnings) của công ty
+    public double change; // Tỷ lệ thay đổi giá của cổ phiếu
+    public String economic; //nghttp kin tế
     @JsonbTransient
     @OneToMany(mappedBy = "product")
     public List<Order> orders;
 
-    public Product(String symbol, String companyName, double currentPrice, double marketCap, double peRatio, String economic) {
+    public Product(String symbol, String companyName, double currentPrice, double marketCap, double peRatio,double change, String economic) {
         this.symbol = symbol;
         this.companyName = companyName;
         this.currentPrice = currentPrice;
         this.marketCap = marketCap;
         this.peRatio = peRatio;
+        this.change = change;
         this.economic = economic;
     }
 
