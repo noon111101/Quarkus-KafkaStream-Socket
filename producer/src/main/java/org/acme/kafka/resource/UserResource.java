@@ -29,4 +29,10 @@ public class UserResource {
        return service.login(loginRequest);
     }
 
+    @GET
+    @Path("/details/{id}")
+    public User me(@PathParam("id") Long id) {
+        return service.getUserById(id);
+    }
+
 }

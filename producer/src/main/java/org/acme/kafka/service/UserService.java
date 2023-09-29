@@ -8,6 +8,7 @@ import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import org.acme.kafka.entity.User;
 import org.acme.kafka.model.LoginRequest;
+import org.acme.kafka.repository.UserRepository;
 import org.acme.kafka.security.TokenService;
 
 @ApplicationScoped
@@ -15,6 +16,8 @@ import org.acme.kafka.security.TokenService;
 public class UserService {
     @Inject
     TokenService service;
+    @Inject
+    UserRepository userRepository;
     @Transactional
     public User register(User user) {
         // Băm mật khẩu trước khi lưu vào cơ sở dữ liệu
@@ -40,5 +43,8 @@ public class UserService {
     private boolean verifyPassword(String plainTextPassword, String hashedPassword) {
         BCrypt.Result result = BCrypt.verifyer().verify(plainTextPassword.toCharArray(), hashedPassword);
         return result.verified;
+    }
+    public User getUserById(Long id) {
+        return userRepository.findById(id);
     }
 }

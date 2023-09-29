@@ -12,6 +12,8 @@ import java.util.List;
 public class User extends PanacheEntity {
     public String username;
     public String email;
+
+    @JsonbTransient
     public String password;
 
     public float balance;
