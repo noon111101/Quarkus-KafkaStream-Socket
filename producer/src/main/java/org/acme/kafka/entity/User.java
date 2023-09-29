@@ -8,7 +8,6 @@ import lombok.Data;
 
 import java.util.List;
 
-@Data
 @Entity
 public class User extends PanacheEntity {
     public String username;
@@ -24,6 +23,10 @@ public class User extends PanacheEntity {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public void setBalance(float balance) {
+        this.balance = balance;
     }
 
     public User() {

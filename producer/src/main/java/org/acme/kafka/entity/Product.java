@@ -10,7 +10,6 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 @EqualsAndHashCode(callSuper = true)
-@Data
 @Entity
 public class Product extends PanacheEntity {
     public String symbol; // Ký hiệu của cổ phiếu (Ví dụ: AAPL cho Apple Inc.)
@@ -20,6 +19,7 @@ public class Product extends PanacheEntity {
     public double peRatio; // Tỷ lệ P/E (Price/Earnings) của công ty
     public double change; // Tỷ lệ thay đổi giá của cổ phiếu
     public String economic; //nghttp kin tế
+
     @JsonbTransient
     @OneToMany(mappedBy = "product")
     public List<Order> orders;
